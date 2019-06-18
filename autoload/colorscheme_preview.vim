@@ -6,7 +6,8 @@ const s:NUM_HELP_LINES = 4
 
 function colorscheme_preview#list_contents() abort
   let s:color_selected = v:false
-  let s:org_highlight = split(execute('highlight'), '\n')
+  let s:org_highlight = []
+  call s:save_highlight()
   let l:ctx = s:show_popup()
   call s:add_contents(l:ctx, 'move: j, k')
   call s:add_contents(l:ctx, 'select: <CR>, <Space>')
@@ -40,7 +41,7 @@ endfunction
 
 function s:update_contents(ctx) abort
   if a:ctx.curr_idx <= s:NUM_HELP_LINES
-    call s:restore_color()
+    call s:restore_highlight()
   else
     execute 'colorscheme ' .. a:ctx.contents[a:ctx.curr_idx]
   endif
@@ -69,13 +70,17 @@ function s:closing_handler(id, result) abort
   if s:color_selected
     echo 'colorscheme selected'
   else
-    call s:restore_color()
+    call s:restore_highlight()
     redraw
     echo 'colorscheme restored'
   endif
 endfunction
 
-function s:restore_color() abort
+function s:save_highlight() abort
+  let s:org_highlight = split(execute('highlight'), '\n')
+endfunction
+
+function s:restore_highlight() abort
   for hi_group in getcompletion('', 'highlight')
     execute 'highlight clear ' .. hi_group
   endfor
