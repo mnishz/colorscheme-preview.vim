@@ -6,7 +6,6 @@ const s:NUM_HELP_LINES = 4
 
 function colorscheme_preview#list_contents() abort
   let s:color_selected = v:false
-  let s:org_highlight = []
   call s:save_highlight()
   let l:ctx = s:show_popup()
   call s:add_contents(l:ctx, 'move: j, k')
@@ -77,7 +76,11 @@ function s:closing_handler(id, result) abort
 endfunction
 
 function s:save_highlight() abort
-  let s:org_highlight = split(execute('highlight'), '\n')
+  let s:org_highlight = []
+  for hi_group in getcompletion('', 'highlight')
+    " join(split()) removes '^@' in the text. Is there any better way?
+    let s:org_highlight += [join(split(trim(execute('highlight ' .. hi_group))))]
+  endfor
 endfunction
 
 function s:restore_highlight() abort
