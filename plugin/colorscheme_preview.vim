@@ -8,7 +8,7 @@ set cpo&vim
 
 scriptencoding utf-8
 
-command ColorshecmePreview call colorscheme_preview#list_contents()
+command ColorschemePreview call colorscheme_preview#list_contents()
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
