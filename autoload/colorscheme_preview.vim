@@ -79,7 +79,7 @@ function s:save_highlight() abort
   let s:org_highlight = []
   for hi_group in getcompletion('', 'highlight')
     " join(split()) removes '^@' in the text. Is there any better way?
-    let s:org_highlight += [join(split(trim(execute('highlight ' .. hi_group))))]
+    let s:org_highlight += [join(split(execute('highlight ' .. hi_group)))]
   endfor
 endfunction
 
@@ -94,7 +94,7 @@ function s:restore_highlight() abort
       let l:xxx_idx = stridx(hi_group, 'xxx ')
       let l:hi_name = hi_group[:l:xxx_idx-1]
       let l:hi_pattern = hi_group[l:xxx_idx+4:]
-      execute 'hi ' .. l:hi_name .. l:hi_pattern
+      execute 'hi ' .. l:hi_name .. ' ' .. l:hi_pattern
     endif
   endfor
 endfunction
